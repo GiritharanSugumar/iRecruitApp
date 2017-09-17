@@ -157,12 +157,7 @@ class AddInterviewViewController: UIViewController , UITableViewDelegate , UITab
                     interviewerName = nil
                     ID = nil
                     btnTag = nil
-//                    if interviewersList.indices.contains(indexPath.row){
-//                        interviewersList[indexPath.row] = name
-//                    }else{
-//                        interviewersList.append(name)
-//                    }
-//                print(interviewersList)
+
                 }
             }
             
@@ -326,7 +321,6 @@ class AddInterviewViewController: UIViewController , UITableViewDelegate , UITab
         var JSONResponse = ["sample1", "sample2"]
         print(interviewersList)
         let role = self.role
-//        let interviewers = self.interviewersList
         let interviewers = ["a","b"]
         let requiredExperience:String = "\(self.experienceYear).\(self.experienceMonth)"
         let peopleRequired = self.numberOfCandidates
