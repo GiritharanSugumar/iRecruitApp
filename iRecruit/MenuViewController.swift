@@ -13,13 +13,13 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBOutlet weak var profileNameLabel: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
-    let menuItems = ["INTERVIEWS" , "INTERVIEWERS" , "STATUS", "PROFILE"]
-    var profileName:String?
+//    let menuItems = ["INTERVIEWS" , "INTERVIEWERS" , "STATUS", "PROFILE"]
+    var menuItems = [String]()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        profileName = "Giritharan"
         
         //Crop Image
         profileImage.layer.cornerRadius = profileImage.frame.width/2
@@ -30,15 +30,26 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         
         profileNameLabel.font = Style.sectionHeaderTitleFont
-        
+        profileNameLabel.text = TokenStorage.shared.user["name"]
         
         
         //Adjust the width of the slide menu
         //       self.revealViewController().rearViewRevealWidth = 62
-        setUpUI()
-        
+       menuItemList()
     }
 
+    func menuItemList() {
+        
+        guard let user = TokenStorage.shared.user["role"] else {
+            return
+        }
+        if user == "admin" {
+          menuItems = ["INTERVIEWS" , "INTERVIEWERS" , "STATUS", "PROFILE"]
+            
+        } else if user == "interviewer" {
+         menuItems = ["INTERVIEWS", "PROFILE"]
+        }
+    }
     
     @IBAction func logOutButton(_ sender: Any) {
         let mainStoryBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -49,16 +60,6 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         self.present(destinationViewController, animated: true, completion:nil)
     }
-    func setUpUI()  {
-        profileNameLabel.text = profileName
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    //TableView Data Source and Delegate
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -77,14 +78,6 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
    
 func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-//        if(indexPath.row == 0) {
-//            
-//        } else if(indexPath.row == 1) {
-//            
-//        } else {
-//            
-//        }
-    //You can use Swich
     let revealViewController:SWRevealViewController = self.revealViewController()
     let cell:MenuTableViewCell = tableView.cellForRow(at: indexPath) as! MenuTableViewCell
     

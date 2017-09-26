@@ -47,9 +47,9 @@ class ProfilePage: UIViewController, UITableViewDelegate, UITableViewDataSource 
         cell.headingLabel.text = fields[indexPath.row]
    
         if indexPath.row == 0 {
-            cell.contentLabel.text = TokenStorage.shared.user["adminName"]
-        } else if indexPath.row == 1 {
             cell.contentLabel.text = TokenStorage.shared.user["name"]
+        } else if indexPath.row == 1 {
+            cell.contentLabel.text = TokenStorage.shared.user["companyName"]
         } else if indexPath.row == 2 {
             cell.contentLabel.text = TokenStorage.shared.user["email"]
         } else if indexPath.row == 3 {

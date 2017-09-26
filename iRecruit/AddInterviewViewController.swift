@@ -18,7 +18,8 @@ class AddInterviewViewController: UIViewController , UITableViewDelegate , UITab
     @IBOutlet weak var tblView: UITableView!
     var datePickerHidden = false
     var pickerHeight = 0
-    var rounds = ["Enter Round1", "Enter Round2", "Enter Round3", "Enter Round4", "Enter Round5", "Enter Round6", "Enter Round7", "Enter Round8", "Enter Round9", "Enter Round10"]
+    var roundsPlaceHolder = ["Enter Round1", "Enter Round2", "Enter Round3", "Enter Round4", "Enter Round5", "Enter Round6", "Enter Round7", "Enter Round8", "Enter Round9", "Enter Round10"]
+    var rounds = ["", "", "", "", "", "", "", "", "", ""]
     var selectedDate:String = "Select the Date"
     var dateForAPI:String = ""
     var newDate:String = ""
@@ -142,7 +143,8 @@ class AddInterviewViewController: UIViewController , UITableViewDelegate , UITab
         else if indexPath.section == 2 {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "AddRounds") as! AddRoundsTableViewCell
-            cell.roundText.placeholder = rounds[indexPath.row]
+            cell.roundText.placeholder = roundsPlaceHolder[indexPath.row]
+            rounds[indexPath.row] = cell.roundText.text!
             cell.interviewerButton.tag = indexPath.row
             guard let name = interviewerName, let tag = btnTag, let intId = ID else{
                 cell.interviewerButton.setTitle(interviewersList[indexPath.row], for: .normal)
@@ -236,7 +238,8 @@ class AddInterviewViewController: UIViewController , UITableViewDelegate , UITab
         let date = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-        //formatter.timeZone = TimeZone(secondsFromGMT: 0)
+//        formatter.timeZone = NSTimeZone(abbreviation: "GMT +5:30") as! TimeZone
+ //       formatter.timeZone = TimeZone(secondsFromGMT: 0)
     
         formatter.locale = Locale(identifier: "en_US_POSIX")
         dateForAPI = formatter.string(from: sender.date)
@@ -288,15 +291,21 @@ class AddInterviewViewController: UIViewController , UITableViewDelegate , UITab
     
     func sendMonth(month: Int) {
         experienceMonth = month
-        if experienceMonth >= 1 {
+        if experienceMonth >= 1  {
            experienceEntry = true
         } else {
             experienceEntry = false
         }
     }
     
+    
     func sendYear(year: Int) {
+        
+        if experienceYear >= 1 {
+            experienceEntry = true
+
         experienceYear = year
+        }
     }
     
     @IBAction func saveInterview(_ sender: Any) {
@@ -304,7 +313,6 @@ class AddInterviewViewController: UIViewController , UITableViewDelegate , UITab
         var isApiCall:Bool = false
         if roleEntry &&  candidatesEntry && roundsEntry && experienceEntry && datePickerchanged && interviewersEntry {
             isApiCall = true
-            alertMessage(message: "success")
 
         } else {
             isApiCall = false
@@ -318,34 +326,45 @@ class AddInterviewViewController: UIViewController , UITableViewDelegate , UITab
     }
 
     func callAPI () {
+        
         var JSONResponse = ["sample1", "sample2"]
-        print(interviewersList)
         let role = self.role
-        let interviewers = ["a","b"]
+        var id = [String]()
+
+        for idValues in interviewerID {
+            if idValues.characters.count > 2 {
+                id.append(idValues)
+            }
+        }
+        
         let requiredExperience:String = "\(self.experienceYear).\(self.experienceMonth)"
         let peopleRequired = self.numberOfCandidates
         let totalRounds = self.tableData[2]
         let date = self.dateForAPI
-        guard let companyId = TokenStorage.shared.user["id"] else { return }
-        let apiParameters = ["role":role,"interviewers":interviewerID,"requiredExperience":requiredExperience,"peopleRequired":peopleRequired,"totalRounds":totalRounds,"date":date,"companyId":companyId] as [String : Any]
+        guard let companyId = TokenStorage.shared.user["companyId"] else { return }
+        let apiParameters = ["role":role,"interviewers":id,"requiredExperience":requiredExperience,"peopleRequired":peopleRequired,"totalRounds":totalRounds,"date":date,"companyId":companyId] as [String : Any]
         let header = ["Authorization": TokenStorage.shared.token]
-        print("APITEST is \(apiParameters)")
-        Alamofire.request("http://13.90.149.245:3000/api/interviewes", method: .post, parameters: apiParameters, encoding: JSONEncoding.default, headers: header).responseJSON {
+
+        Alamofire.request("http://13.90.149.245:3000/api/interviews", method: .post, parameters: apiParameters, encoding: JSONEncoding.default, headers: header).responseJSON {
             response in
             
             switch response.result {
             case .success:
                 let swiftyJsonVar = JSON(response.data!)
-                print("SW is  \(swiftyJsonVar)")
-                var isSuccess:Bool = false
+                print("Result in Add Interview is  \(swiftyJsonVar)")
                 JSONResponse[0] = String(describing: swiftyJsonVar["isSuccess"])
                 JSONResponse[1] = String(describing: swiftyJsonVar["token"])
                 print("Lol \(JSONResponse[0]), \(JSONResponse[1])")
                 if JSONResponse[0] == "true" {
-                    isSuccess = true
+                    let successAlert = UIAlertController(title: "Alert", message: "Interview Added Successful", preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "✅", style: .default, handler: { (alert) in
+                        self.openInterviewsVC()
+                    })
+                    successAlert.addAction(okAction)
+                    self.present(successAlert, animated: true, completion: nil)
                 } else if JSONResponse[1] == "false" {
-                    isSuccess = false
-                }
+                    self.alertMessage(message: "You Entered wrong credentials")                }
+                
             case .failure(let error):
                 print(error)
             }
@@ -353,7 +372,10 @@ class AddInterviewViewController: UIViewController , UITableViewDelegate , UITab
         }
 
     }
-    
+    func openInterviewsVC() {
+        let interviewVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Interviews") as! InterviewsViewController
+        navigationController?.pushViewController(interviewVC, animated: true)
+    }
     func alertMessage(message: String) {
         let myAlert = UIAlertController(title: "Alert", message: message, preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)

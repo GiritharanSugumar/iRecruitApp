@@ -18,6 +18,8 @@ class InterviewCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var categoryResult: UILabel!
     @IBOutlet weak var status: UILabel!
     @IBOutlet weak var role: UILabel!
+    @IBOutlet var finishedRoundsLbl: UILabel!
+    @IBOutlet var completedLbl: UILabel!
     
-    
+   
 }

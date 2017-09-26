@@ -36,7 +36,8 @@ class SignInViewController: UIViewController  {
         self.navigationButton.target = revealViewController()
         self.navigationButton.action = #selector(SWRevealViewController.revealToggle(_:))
         setUpUI()
-        loginAzure(email: "abcd@abcd.com", password: "abcdabcd")
+//       loginAzure(email: "girisugu2@gmail.com", password: "giritharan")
+        loginAzure(email: "kamalkruze@gmail.com", password: "3d26abed8c6ab")
     }
     
     func setUpUI() {
@@ -77,6 +78,7 @@ class SignInViewController: UIViewController  {
         }
         if isFieldsSuccess == true &&  isCheckFields == true {
             loginAzure(email: email, password: password)
+        
         }
         
         //    /* Save the Session */
@@ -101,17 +103,8 @@ class SignInViewController: UIViewController  {
                 var isSuccess:Bool = false
                 JSONResponse[0] = String(describing: swiftyJsonVar["isSuccess"])
                 JSONResponse[1] = String(describing: swiftyJsonVar["token"])
-                print("Lol \(JSONResponse[0]), \(JSONResponse[1])")
                 self.headerString = JSONResponse[1]
-                
-                            
-                
-                if JSONResponse[0] == "true" {
-                    isSuccess = true
-                } else if JSONResponse[1] == "false" {
-                    isSuccess = false
-                }
-                
+             
                  let token = JSONResponse[1]
                 
                 if !(token.isEmpty) {
@@ -119,21 +112,7 @@ class SignInViewController: UIViewController  {
                     TokenStorage.shared.token = token
                     
                 }
-                if isSuccess == true && JSONResponse[1] != nil {
-           
-                    //Move to homePage
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let sw = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
-                    self.view.window?.rootViewController = sw
-                    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "Interviews") as! InterviewsViewController
-                    
-                    let navigationController = UINavigationController(rootViewController: destinationController)
-                    
-                    sw.pushFrontViewController(navigationController, animated: true)
-                    
-                } else  {
-                    self.alertMessage(message: "You Entered wrong credentials")
-                }
+                
                 break
             case .failure(let error):
                 self.alertMessage(message: "Something went Wrong")
@@ -146,8 +125,8 @@ class SignInViewController: UIViewController  {
     
     func getMe(tokenValue: String) {
         
-        var contentArray = ["","","","","",""]
-        
+        var contentArray = ["","","","","","",""]
+        var JSONResponse = ["sample1", "sample2"]
         let headers: HTTPHeaders = ["Authorization": tokenValue]
         Alamofire.request("http://13.90.149.245:3000/api/me", headers: headers)
             .responseJSON { response in
@@ -155,19 +134,48 @@ class SignInViewController: UIViewController  {
                 switch  response.result {
                 case .success:
                     guard let responseData = response.data else {return}
+                    var isSuccess:Bool = false
                     self.swiftyJSONMe = JSON(responseData)
+                    JSONResponse[0] = String(describing: self.swiftyJSONMe["isSuccess"])
                     contentArray[0] = String(describing: self.swiftyJSONMe["user"]["adminName"])
                     contentArray[1] = String(describing: self.swiftyJSONMe["user"]["name"])
                     contentArray[2] = String(describing: self.swiftyJSONMe["user"]["email"])
                     contentArray[3] = String(describing: self.swiftyJSONMe["user"]["role"])
+//                    let r = UserDefaults.standard.set(contentArray[3], forKey: "Role")
+                    
                     contentArray[4] = String(describing: self.swiftyJSONMe["user"]["phone"])
-                    contentArray[5] = String(describing: self.swiftyJSONMe["user"]["id"])
-                    TokenStorage.shared.user["adminName"] = contentArray[0]
-                    TokenStorage.shared.user["name"] = contentArray[1]
+                    contentArray[6] = String(describing: self.swiftyJSONMe["user"]["id"])
+                    contentArray[5] = String(describing: self.swiftyJSONMe["user"]["companyId"])
+                    
+                    if contentArray[3] == "admin" {
+                        TokenStorage.shared.user["companyId"] = contentArray[6]
+                        TokenStorage.shared.user["name"] = contentArray[0]
+                        TokenStorage.shared.user["companyName"] = contentArray[1]
+                        
+                        print(contentArray[3])
+                    } else if contentArray[3] == "interviewer" {
+                        print(contentArray[3])
+                        TokenStorage.shared.user["companyId"] = contentArray[5]
+                        TokenStorage.shared.user["name"] = contentArray[1]
+                        TokenStorage.shared.user["interviewerId"] = contentArray[6]
+                    }
                     TokenStorage.shared.user["email"] = contentArray[2]
                     TokenStorage.shared.user["role"] = contentArray[3]
                     TokenStorage.shared.user["phone"] = contentArray[4]
-                    TokenStorage.shared.user["id"] = contentArray[5]
+                   
+                    if JSONResponse[0] == "true" {
+                        //Move to homePage
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let sw = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
+                        self.view.window?.rootViewController = sw
+                        let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "Interviews") as! InterviewsViewController
+                        
+                        let navigationController = UINavigationController(rootViewController: destinationController)
+                        
+                        sw.pushFrontViewController(navigationController, animated: true)
+                    } else  {
+                        self.alertMessage(message: "You Entered wrong credentials")
+                    }
                
                 case .failure:
                     break

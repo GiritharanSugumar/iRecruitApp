@@ -87,7 +87,7 @@ class AddInterviewerViewController: UIViewController, UITableViewDataSource, UIT
     func addInterviewerAPI()  {
         
         let receivedToken = TokenStorage.shared.token
-        let companyID = TokenStorage.shared.user["id"]
+        let companyID = TokenStorage.shared.user["companyId"]
         var JSONResponse = ["sample1", "sample2"]
         let headers: HTTPHeaders = ["Authorization": receivedToken]
         let apiFields = ["name": interviewerTextFields[0], "email": interviewerTextFields[1],  "phone": interviewerTextFields[2], "designation": interviewerTextFields[3], "companyId": companyID ]
@@ -126,22 +126,10 @@ class AddInterviewerViewController: UIViewController, UITableViewDataSource, UIT
         }
         
     }
-
-   
-//    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//    let sw = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
-//    self.view.window?.rootViewController = sw
-//    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "Interviews") as! InterviewsViewController
-//    
-//    let navigationController = UINavigationController(rootViewController: destinationController)
-//    
-//    sw.pushFrontViewController(navigationController, animated: true)
-    
-    
+  
     func openInterviewersVC () {
-        let loginVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "InterViewer") as! InterViewerViewController
-        
-        self.present(loginVC, animated: true, completion: nil)
+        let interviewerVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "InterViewer") as! InterViewerViewController
+      navigationController?.pushViewController(interviewerVC, animated: true)
     }
     
     func alertMessage(message:String) {

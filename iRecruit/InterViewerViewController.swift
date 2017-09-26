@@ -56,7 +56,7 @@ class InterViewerViewController: UIViewController, UITableViewDelegate, UITableV
     
     func interviewersList() {
         let headerToken = TokenStorage.shared.token
-        guard let id = TokenStorage.shared.user["id"] else {
+        guard let id = TokenStorage.shared.user["companyId"] else {
             return
         }
         let companyID = ["companyId": id]

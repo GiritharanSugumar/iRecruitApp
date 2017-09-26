@@ -7,38 +7,81 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
-class AddCandidateViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class AddCandidateViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, candidateDelegates, CandidateExperienceDelegate {
 
+    let candidateDetails = ["Candidate Name", "Position", "Phone Number", "Email ID", "Skills"]
+    var candidateText = ["","","","",""]
+
+    var experienceMonth = 0
+    var experienceYear = 0
     override func viewDidLoad() {
         super.viewDidLoad()
+        let interviewId = ContainerViewController.id.receivedInterviewID
 
         // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
     }
-    
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        if section == 0 {
+            return candidateDetails.count
+        } else {
+        return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = "candidate"
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! AddCanditateCell
+        
+        if indexPath.section == 0 {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "candidate", for: indexPath) as! AddCanditateCell
+
+        cell.candidateDelegate = self
+        cell.headLabel.text = candidateDetails[indexPath.row]
+        cell.textEnter.text = candidateText[indexPath.row]
+        cell.showCandidates(labelFields: candidateDetails[indexPath.row], candidateText: candidateText[indexPath.row], tag: indexPath.row)
+        print(candidateText[indexPath.row])
         return cell
+        } else  {
+         let experienceCell = tableView.dequeueReusableCell(withIdentifier: "experience", for: indexPath) as! CandidateExperienceTableViewCell
+            return experienceCell
+        }
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 1 {
+            return 140
+        } else {
+            return 80
+        }
     }
-    */
-
+    func candidate(text: String, tagValue: Int) {
+        candidateText[tagValue] = text
+    }
+    
+    func sendYear(year: Int) {
+        experienceYear = year
+    }
+    
+    func sendMonth(month: Int) {
+        experienceMonth = month
+    }
+    @IBAction func saveCandidateBtn(_ sender: Any) {
+        print(candidateText)
+        
+        addCandidateApi()
+    }
+    
+    func addCandidateApi() {
+        
+        let receivedToken = TokenStorage.shared.token
+        let headers: HTTPHeaders = ["Authorization": receivedToken]
+        let candidatesFields = [""]
+    }
+   
 }

@@ -77,6 +77,8 @@
 		49F410D91F4C622E00599274 /* SegmentationRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F410D81F4C622E00599274 /* SegmentationRadius.swift */; };
 		49F410DB1F4C624600599274 /* ImageRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F410DA1F4C624500599274 /* ImageRadius.swift */; };
 		49F410DD1F4C626B00599274 /* LabelRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F410DC1F4C626B00599274 /* LabelRadius.swift */; };
+		49F859A21F79223600D1F335 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F859A11F79223600D1F335 /* ContainerViewController.swift */; };
+		49F859A41F7928F300D1F335 /* CandidateExperienceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F859A31F7928F300D1F335 /* CandidateExperienceTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -155,6 +157,8 @@
 		49F410D81F4C622E00599274 /* SegmentationRadius.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentationRadius.swift; sourceTree = "<group>"; };
 		49F410DA1F4C624500599274 /* ImageRadius.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRadius.swift; sourceTree = "<group>"; };
 		49F410DC1F4C626B00599274 /* LabelRadius.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelRadius.swift; sourceTree = "<group>"; };
+		49F859A11F79223600D1F335 /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		49F859A31F7928F300D1F335 /* CandidateExperienceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CandidateExperienceTableViewCell.swift; sourceTree = "<group>"; };
 		B3A25CB3359A61393C9948E4 /* Pods-iRecruit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iRecruit.release.xcconfig"; path = "Pods/Target Support Files/Pods-iRecruit/Pods-iRecruit.release.xcconfig"; sourceTree = "<group>"; };
 		D45512FC2EAAC75C4C7E468B /* Pods-iRecruit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iRecruit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iRecruit/Pods-iRecruit.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -284,6 +288,8 @@
 			isa = PBXGroup;
 			children = (
 				49F4106C1F4C56FC00599274 /* AddCandidates */,
+				49F859A11F79223600D1F335 /* ContainerViewController.swift */,
+				49F859A31F7928F300D1F335 /* CandidateExperienceTableViewCell.swift */,
 			);
 			name = Interviewers;
 			sourceTree = "<group>";
@@ -694,9 +700,11 @@
 				49F410D11F4C616300599274 /* IQBarButtonItem.swift in Sources */,
 				49F410CB1F4C616300599274 /* IQUIWindow+Hierarchy.swift in Sources */,
 				49F410C71F4C616300599274 /* IQUIScrollView+Additions.swift in Sources */,
+				49F859A21F79223600D1F335 /* ContainerViewController.swift in Sources */,
 				491CA88D1F4C7AE2008EA583 /* RoundsTableViewCell.swift in Sources */,
 				49F410D01F4C616300599274 /* IQTextView.swift in Sources */,
 				491CA88F1F4C7B20008EA583 /* FinishedTableViewCell.swift in Sources */,
+				49F859A41F7928F300D1F335 /* CandidateExperienceTableViewCell.swift in Sources */,
 				49F410791F4C5ACA00599274 /* StatusTableViewCell.swift in Sources */,
 				49F410CD1F4C616300599274 /* IQKeyboardManagerConstantsInternal.swift in Sources */,
 				491CA88B1F4C7AC1008EA583 /* OngoingViewController.swift in Sources */,
